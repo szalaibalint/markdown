@@ -339,6 +339,7 @@ template_name = 'notams.html'^
 A lista html megjelenítése lent látható. A Template Language lehetővé teszi for loopok
 használatát html-ben.
 
+![1](images/2.png)
 
 #### Update Notam
 
@@ -374,6 +375,8 @@ Service, ahonnan JSON formátumban érkeznek az adatok. A második pont az infor
 szűrés az időnként kifejezetten hosszú szöveg tartalmában. Az alábbi képen egy budapesti
 műszeres megközelítési eljárás ideiglenes használaton kívül helyezéséről szóló NOTAM
 látható.
+
+![1](images/3.png)
 
 Ez egy rövid és jól értelmezhető NOTAM, de vannak 1000 karakteres verziók is. Az első
 sor legelején található a NOTAM id (A1216/21). Az adatbázisban ez az országkód
@@ -467,6 +470,8 @@ talált egyezést, akkor egy stringgé alakítja a lista tartalmát, majd megviz
 hét valamely nevével, vagy számmal kezdődik, a nyitvatartást ugyanis napokra vagy dátumra
 is kiadhatják.
 
+![1](images/4.png)
+
 Ha más szavakkal kezdődik a szöveg, addig törli az elejét, amíg meg nem valósul a kívánt
 eredmény. Végül az elejére tűzi az „AD OPEN” szavakat, és visszatéríti a stringet.
 
@@ -504,6 +509,8 @@ return f' **{** text **}** NOT AVBL'^
 Fontos információt tartogat még egy NOTAM D) szekciója, amely az érvényességi időn
 belüli periódusokat jelzi. Amennyiben meghatározzák ezt, a változások nem a NOTAM teljes
 hatálya alatt aktívak, hanem csak a megadott periódusokban.
+
+![1](images/5.png)
 ```
 D_PERIOD = r"D\)[ \-A-Z0- 9 \n]*E\)"
 def periods(string):
@@ -589,6 +596,7 @@ template_name = "airports_upload.html"
 form_class = AirportForm
 success_url = "/"^
 ```
+![1](images/6.png)
 
 #### API hívása
 
@@ -614,6 +622,8 @@ success_url = reverse_lazy("notam_select")^
 ```
 A NotamSelectView azonos minta szerint lett létrehozva, mint a korábbi, formot
 megjelenítő view-k.
+
+![1](images/7.png)
 
 A html form action attribútuma a call view-ra mutat, submit esetén tehát egy POST
 requesttel kezdeményezzük az API hívást. Az API cím 3 kötelező paraméterrel rendelkezik:
@@ -881,6 +891,8 @@ lehet túl egyszerű (pl. a password szót jelszóként nem fogja elfogadni). Az
 megadása még nem implementált funkciók miatt szükséges. A regisztráció aktiválására nincs
 szükség, azonnal be lehet jelentkezni.
 
+![1](images/8.png)
+
 #### Bejelentkezés
 
 A navigációs sávon található „Log in” gombra kattintva megjelenik a bejelentkezési oldal.
@@ -897,6 +909,8 @@ Bejelentkezett felhasználó esetén a navigációs sávon megjelenik a felhaszn
 
 #### NOTAMok listázása
 
+![1](images/9.png)
+
 Az adatbázisban megtalálható NOTAMok listázásához a „List notams” feliratú kártyára
 kell kattintanunk. Az átirányított oldalon láthatjuk a teljes listát, illetve szűrhetünk kulcsszó,
 repülőtér, qcode valamint érvényességi idő szerint. Minden szűrési feltétel teljesül a „Filter”
@@ -905,10 +919,14 @@ zárást egy tetszőleges reptéren. Kulcsszóra a „Search for keywords” sz�
 mezőben tudunk keresni. A „Reset” gombra kattintva minden szűrési beállítás alapértelmezett
 állapotba kerül, és a teljes lista jelenik meg.
 
+![1](images/10.png)
+
 
 A NOTAMok kártyaként jelennek meg, felső részén a qcode-hoz tartozó kép, alsó részén a
 comment mező tartalma látható. A kép bal felső sarkában a NOTAMhoz vonatkozó repülőtér
 ICAO kódja, jobb felső sarkában a qcode olvasható.
+
+![1](images/11.png)
 
 ```
 A képre kattintva felugranak a NOTAM további részletei:
@@ -921,6 +939,7 @@ A képre kattintva felugranak a NOTAM további részletei:
 ```
 • delete gomb: NOTAM törlése, csak staff felhasználók számára elérhető
 ```
+![1](images/12.png)
 ```
 X-re kattintva eltűnik.
 ```
@@ -951,6 +970,8 @@ része a honlapon keresztül is elérhető, azonban bizonyos esetekben, pl. tesz
 
 kényelmesebb megoldás a kibővített funkciókkal rendelkező admin felületen keresztül
 elvégezni őket. Az admin felület relatív címe „/admin/”.
+
+![1](images/13.png)
 
 #### NOTAMok letöltése, feldolgozása
 
