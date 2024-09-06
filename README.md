@@ -132,6 +132,7 @@ megkönnyítésére rengeteg beépített, örökölhető osztály áll rendelkez
 ```
 processing/urls.py
 ```
+```
 urlpatterns = [
 path('', home, name='home'),
 path('call/', call, name='call'),
@@ -148,7 +149,7 @@ path('<int:pk>/delete/', NotamDeleteView.as_view(),
 name='notam_delete'),
 path('cleanup/', cleanup, name='cleanup'),
 ]
-
+```
 Az urlpatterns változó egy listába foglalja az apphoz tartozó útvonalakat. A path függvény
 3 felhasznált argumentum a következő:
 
@@ -169,12 +170,12 @@ követően.
 
 
 #### Runway tábla
-
+```
 class **Runway** (models.Model):
 airport = models.CharField(max_length= 4 )
 designator = models.CharField(max_length= 3 )
 category = models.CharField(max_length= 5 )
-
+```
 Futópályák mezői:
 
 ```
@@ -183,11 +184,11 @@ Futópályák mezői:
 • category: Műszeres megközelítés kategóriája
 ```
 #### Airport tábla
-
+```
 class **Airport** (models.Model):
 icao = models.CharField(max_length= 4 )
 purpose = models.CharField(max_length= 4 )^
-
+```
 Repülőterek mezői:
 
 ```
@@ -195,7 +196,7 @@ Repülőterek mezői:
 • purpose: Repülőtér besorolása (bázis, desztináció)
 ```
 #### Notam tábla
-
+```
 class **Notam** (models.Model):
 notam_id = models.CharField(max_length= 15 )
 airport = models.CharField(max_length= 4 )
@@ -204,7 +205,7 @@ message = models.CharField(max_length= 511 )
 startdate = models.DateTimeField()
 enddate = models.DateTimeField()
 comment = models.CharField(max_length= 511 , default="")^
-
+```
 NOTAMok mezői:
 
 ```
@@ -254,6 +255,7 @@ kivételével csupán templateket kellet létrehozni, és egy URL-hez kötni a b
 ```
 Form létrehozása
 ```
+```
 class **SignUpForm** (UserCreationForm):
 email = forms.EmailField(max_length= 254 , help_text='Required.
 Inform a valid email address.')
@@ -261,7 +263,7 @@ class **Meta** :
 model = User
 fields = ('username', 'email', 'password1', 'password2',
 )^
-
+```
 A beépített UserCreationForm kibővítésével lett létrehozva a form. A model változóval a
 létrehozandó modelt definiálhatjuk. A fields változó tartalmazza az összes megjelenítendő
 input mezőt.
@@ -269,11 +271,13 @@ input mezőt.
 ```
 SignUpView létrehozása
 ```
+```
 class **SignUpView** (CreateView):
 form_class = SignUpForm
 success_url = reverse_lazy('login')
 template_name = 'signup.html'
 
+```
 A Django adta lehetőségek kihasználása érdekében osztály alapú View-t választottam a
 regisztrációnak. A CreateView új adatbázis sor létrehozására alkalmas beépített osztály. a
 form_class változóval hozzácsatolhatjuk a már korábban létrehozott formot, ezzel együtt
@@ -300,12 +304,14 @@ model = Notam
 fields = "__all__"^
 Ezt a formot bele kell illeszteni a hozzá tartozó View-ba.
 ```
+```
 @method_decorator(staff_member_required, name='dispatch')
 class **NotamCreateView** (CreateView):
 model = Notam
 form_class = NotamForm
 success_url = reverse_lazy("notam_list")
 template_name = "notam_create.html"^
+```
 Ennél a View-nál megjelenik a staff_member_required dekorátor, mivel nem szeretném, ha
 egy mezei felhasználó is módosítani tudná az adatbázis tartalmát. Ezen kívül minden már
 változó jelentése már ismert. A form megjelenítése a html fájlban a következő módon néz ki:
@@ -323,11 +329,12 @@ hajlandó renderelni a keretrendszer.
 Az adatbázis tartalmának megjelenítésére a beépített ListView nyújt segítséget. A
 dekorátor ezúttal a login_required lesz, ez a lap ugyanis nem ad lehetőséget adatok
 módosítására.
-
+```
 @method_decorator(login_required, name='dispatch')
 class **NotamListView** (ListView):
 model = Notam
 template_name = 'notams.html'^
+```
 A lista html megjelenítése lent látható. A Template Language lehetővé teszi for loopok
 használatát html-ben.
 
@@ -382,43 +389,50 @@ A regexek megadott mintákat keresnek a szövegben, és ha egyezést talál, vá
 az eredményt. A NOTAMok esetében a feladat az volt, hogy minden olyan qcode-hoz,
 amilyen NOTAMokat az adatbázisba kell menteni, legyen meghatározva egy regex minta. Ha
 a qcode-okra szeretnénk mintát felállítani, az alábbi kódot használhatnánk.
-
+```
 QCODES = r"\/Q[A-Z] **{4}** \/"
+```
 A fenti minta egyezni fog minden olyan szövegrészlettel, ami törtvonalak közötti, Q-val
 kezdődő 5 nagybetűből áll. Mivel a NOTAMok szövegezése még azonos qcode-ok esetén is
 nagyban különbözik, így a használt regexek ennél jelentősen hosszabbak.
-
+```
 MRLC = r"(?:RWY|RUNWAY) *[0-9] **{2}** [LRC]*(?:\/[0-9] **{2}** [LRC]*)*
 *(?:CLOSED|CLSD)"
-
+```
+```
 FAAH = STAH = FALC = ATCA = SPAH = ACAH = AECA = r"(?:(?:[A-
 Z] **{3}** )|(?:[0-9] **{2}** ))[\-\/A-Z0-9 ,]{0,24}:*(?: [0- 9 \-]*)*(?:[
 \n,]*[0-9: ]{4,5}-[0-9: ]{4,5})+"
-
+```
+```
 PIAU = r"(?:ILS[A-Z0-9 ]*(?:RWY[0-9RLC ]{2,3})*(?: CAT
 [I]{1,3}[AB]*)*[A-Z0-9,\/ ]*(?:SUSPENDED|NOT AVBL))|(?:NOT
 AVAILABLE:\nILS[A-Z0-9 ]*RWY[0-9RLC ]{2,3}(?: CAT [I]{1,3}[AB]*)*)"
-
+```
+```
 ICCT = r"(?:ILS|INSTRUMENT LANDING SYSTEM)[\) A-Z]* RWY[ 0-9RLC]*
 (?:OPERATING )*(?:ON TEST)*"
-
+```
+```
 ICAS = ISAS = IGAS = ILAS = IUAS = r"(?:ILS\)*(?:[ A-Z] **{4}** )* (?:GP
 )*(?:LOC )*(?:CAT [I\/AB]* )*(?:FOR )*RWY[ 0-9RLC\/]*)|(?:RWY[ 0-
 9RCL:\/]*ILS)"
-
+```
+```
 FIAU = r".*"
-
+```
 
 #### Segéd függvények
 
 A segéd függvények a regexeket veszik alkalmazásba, egyrészt minden qcode-hoz tartozik
 egy függvény, másrészt egy-egy függvény feladata a NOTAMok periódusának meghatározása
 ill. a teljes üzenet kivonása (a példa NOTAMban az E) és a CREATED közötti szöveg).
-
+```
 def MRLC(string):
 pattern = getattr(regex, "MRLC")
 result = re.findall(pattern, string)
 return ", ".join(result)^
+```
 Egyszerűbb qcode-okhoz tartozó függvények a fenti sablonon alapszanak. Ezek esetében a
 regex önmagában elég a kívánt eredmény eléréséhez, nincs szükség korrigálásra. A pattern
 változóhoz hozzárendeli a regex modulból az MRLC változó értékét. A re.findall függvény
@@ -429,10 +443,10 @@ tagokat vesszővel elválasztva visszatéríti.
 Vannak azonban olyan qcode-ok, ahol a kreált regexek önmagukban zajjal járnak. Ilyen
 például a repülőterek nyitvatartását vizsgáló regexek. Ezeket a zajokat a segéd függvény
 hivatott fixálni. Az ellenőrzéshez még két változó lett létrehozva.
-
+```
 DAYS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"]
 NUM = "0123456789"^
-
+```
 ```
 def FAAH(string):
 pattern = getattr(regex, "FAAH")
@@ -458,7 +472,7 @@ eredmény. Végül az elejére tűzi az „AD OPEN” szavakat, és visszatérí
 Más megközelítést igényel a műszeres megközelítés korlátozására vonatkozó regex
 kezelése, azon belül is kétféle NOTAMot kell vizsgálni. Az egyik a tesztelés alatt álló
 műszerekről ad információt, és a cél, hogy „ON TEST” szóra végződjön.
-
+```
 def ICCT(string):
 pattern = getattr(regex, "ICCT")
 result = re.findall(pattern, string)
@@ -468,13 +482,14 @@ text = ", ".join(result)
 if **not** text.endswith("ON TEST"):
 text += " ON TEST"
 return text^
+```
 A másik korrigálni való, amelyik a működésen kívüli műszereket taglalja, ezek ugyanis
 gyakran a működésen kívüli rendszer frekvenciáját is közlik. Ez azonban számunkra nem
 lényegi információ, viszont a regexeket megzavarja egy kissé, és a csatorna frekvenciát is
 megtalálja a vesszőig. A függvény ezért leellenőrzi, hogy az adott találat esetén is ez történt-
 e, és ha igen, eltávolítja a nem kívánt számokat.
 
-
+```
 def ICAS(string):
 pattern = getattr(regex, "ICAS")
 result = re.findall(pattern, string)
@@ -484,15 +499,17 @@ text = ", ".join(result)
 if all(c **in** NUM for c **in** text[- 3 :]):
 text = text[:- 4 ]
 return f' **{** text **}** NOT AVBL'^
+```
 Fontos információt tartogat még egy NOTAM D) szekciója, amely az érvényességi időn
 belüli periódusokat jelzi. Amennyiben meghatározzák ezt, a változások nem a NOTAM teljes
 hatálya alatt aktívak, hanem csak a megadott periódusokban.
-
+```
 D_PERIOD = r"D\)[ \-A-Z0- 9 \n]*E\)"
 def periods(string):
 pattern = getattr(regex, "D_PERIOD")
 result = re.findall(pattern, string)
 return result[ 0 ][ 2 :- 2 ].strip() if result else ""^
+```
 D) szekció jelenléte esetén visszatéríti annak tartalmát, ellenkező esetben üres stringet ad.
 Az utolsó segéd függvény feladata kezelni a többi, regexeket feldolgozó függvényt, és ennek
 a visszatérített értéke kerül az adatbázis Notam táblájának comment mezejébe.
@@ -509,9 +526,10 @@ return ""
 if qcode == "PIAU" and period and not content:
 return ""
 ```
+```
 return f" **{** period **} {** content **}** " if period else
 f" **{** content **}** ".replace(" **\n** ", "")
-
+```
 A függvény argumentumai a NOTAM teljes szövegtartalma, valamint a qcode. Lefuttatja a
 periódus kereső függvényt, illetve a qcode-dal megegyező elnevezésű függvényt. A comment
 függvény részeként lett meghatározva még két kivétel, melyek esetén üres függvényt tér
@@ -545,11 +563,12 @@ if not file.name.endswith(".csv"):
 raise forms.ValidationError("File type not supported!")
 return file
 ```
+```
 def process_csv(self):
 csv_file =
 io.TextIOWrapper(self.cleaned_data["file_upload"].file)
 reader = csv.DictReader(csv_file)
-
+```
 ```
 airports = [Airport(
 icao = row["ICAO"],
@@ -585,11 +604,13 @@ A NotamSelectForm 2 input mezőt hoz létre:
 • remark: szabad szöveges input mező, specifikus opció esetén az itt felsorolt
 repterekre fogja lekérni a NOTAMokat.
 ```
+```
 @method_decorator(staff_member_required, name='dispatch')
 class **NotamSelectView** (FormView):
 template_name = "notam_select.html"
 form_class = NotamSelectForm
 success_url = reverse_lazy("notam_select")^
+```
 A NotamSelectView azonos minta szerint lett létrehozva, mint a korábbi, formot
 megjelenítő view-k.
 
@@ -602,12 +623,14 @@ requesttel kezdeményezzük az API hívást. Az API cím 3 kötelező paraméter
 • format: CSV vagy JSON
 • locations: egy, vagy több ICAO kód vesszővel elválasztva
 ```
+```
 API_ADDRESS =
 f"https://applications.icao.int/dataservices/api/notams-
 list?api_key= **{** API_KEY **}** &format=json&locations="
-
+```
 ```
 A call view első feladata meghatározni, mi lesz a locations paraméter értéke.
+```
 ```
 if request.method == "GET":
 locations = [airport.icao for airport **in**
@@ -621,7 +644,7 @@ locations = [airport.icao for airport **in**
 Airport.objects.filter(purpose__in=["BASE", "DEST"])]
 elif request.POST["locations"] == "2":
 locations = request.POST["remark"].split()
-
+```
 GET request esetén alapértelmezetten minden bázisra és desztinációra lekéri a
 NOTAMokat. POST request esetén a kérés locations értékét veszi alapul a paraméter
 megadásának.
@@ -632,7 +655,7 @@ notamdata = response.json()^
 A request.get metódus elküldi a kérést az API szolgálat felé, majd a visszakapott JSON
 formátumú adatot a json metódus átkonvertálja Python által kezelhető objektummá, majd
 elmenti a notamdata változóba.
-
+```
 {
 "_id": "60718282f2b9a3f8f8392eac",
 "id": "A1320/21",
@@ -686,12 +709,14 @@ FLIGHT,\n-ACTUAL ACTIVITY AVBL ON ATIS.\nCREATED: 30 Mar 2021 07:44:00
 
 
 }
+```
 
 A fent látható példa egy Beauvais repterére kiadott NOTAM adatait tartalmazza JSON
 formátumban.
 
 ```
 notam_ids = [notam.notam_id for notam in Notam.objects.all()]
+```
 ```
 notams = [Notam(
 notam_id = f" **{** data['location'][ 0 : 2 ] **} {** data['id'] **}** ",
@@ -718,6 +743,7 @@ comment = util.comment(data["message"], data["Qcode"])
 "ATCA", "SPAH", "ACAH", "AECA",
 "PIAU", "ICCT", "ICAS", "ISAS",
 "IGAS", "ILAS", "IUAS", "FIAU"]]^
+```
 A notam_ids változó a függvény hívásakor adatbázisban szereplő összes NOTAM
 hivatalos (nem az adatbázis által adott, hanem a kiadó hatóság által meghatározott) id-ját
 tartalmazza. A notams lista Notam objektumokat hoz létre a kapott JSON adatok megfelelő
@@ -731,7 +757,9 @@ használt dátumformátumot a Python által kezelhetővé.
 ```
 Notam.objects.bulk_create(notams)
 ```
+```
 return redirect(reverse_lazy("notam_list"))^
+```
 A bulk_create létrehozza a bejegyzéseket az összes, notams listában jelenlévő NOTAMra.
 A view végül átirányít az összes NOTAMot listázó oldalra.
 
@@ -741,7 +769,7 @@ A reporting app egyetlen view segítségével készít jelentést az adatbázisb
 NOTAMokról. POST request esetén emailben elküldi a jelentést az előre beállított
 címzettnek. A jelentést a request message paramétere tartalmazza. A send_mail függvény
 szintént a Django beépített elemeinek egyik eleme.
-
+```
 def verbose_report(request):
 if request.method == "POST":
 subject = "verbose report"
@@ -750,17 +778,18 @@ email_from = settings.EMAIL_HOST_USER
 recipient_list = ["botond@roff.hu"]
 send_mail(subject, message, email_from, recipient_list)
 return redirect(reverse_lazy("notam_list"))^
+```
 GET request esetén meghatározza az időintervallumot, amire készíti a jelentést, ez a
 request időpontjától számított 24 óra. Az adatbázisból lekéri az ebben az időszakban érvényes
 NOTAMokat, valamit a repülőtereket.
-
+```
 else:
 start = datetime.datetime.now()
 end = start + datetime.timedelta(hours=24)
 notams = Notam.objects.filter(startdate__lt=end)
 airports = {airport.icao: airport.purpose for airport **in**
 Airport.objects.all()}
-
+```
 
 Definiál két dict adatszerkezetet, egyet a bázisoknak, egyet a desztinációknak. For ciklus
 megvizsgálja a notams lista összes elemét a következő módon. A text változóhoz hozzárendeli
@@ -769,7 +798,7 @@ a base szótárban a reptér kulcshoz tartozó értéket, illetve ha még nincs 
 Leellenőrzi, hogy a kijelölt 24 óra teljes hosszában érvényes-e a vizsgált NOTAM, és ha
 nem, kiegészíti a kezdő és/vagy záró időponttal. Majd frissíti a szótárban a repülőtérhez
 hozzárendelt értéket.
-
+```
 base = {}
 for notam **in** sorted(notams, key=lambda x: x.airport):
 text = f" **{** base.get(notam.airport,
@@ -792,11 +821,11 @@ text += f" TILL **{** str(notam.enddate)[ 8 : 16 ] **}** "
 if airports.get(notam.airport, "") == "DEST" **and**
 notam.comment.strip():
 dest[notam.airport] = text
-
+```
 A view végül egy stringbe rendezi a két szótár tartalmát, és a render függvény context
 argumentumához adja.
 
-
+```
 message = "BASE **\n** "
 for airport, notam **in** base.items():
 message += f" **{** airport **}\t{** notam **}\n** "
@@ -809,7 +838,7 @@ context = {
 }
 return render(request, "report_preview.html",
 context=context)
-
+```
 ### Tesztdokumentáció
 
 #### Kompatibilitás
