@@ -2,10 +2,9 @@
 
 ## NOTAM PROCESSOR
 
-```
-Budapest
-2021
-```
+### Budapest
+### 2021
+
 ## Témavezető Készítette
 
 ## Kovács László Cserményi Botond
@@ -315,6 +314,8 @@ template_name = "notam_create.html"^
 Ennél a View-nál megjelenik a staff_member_required dekorátor, mivel nem szeretném, ha
 egy mezei felhasználó is módosítani tudná az adatbázis tartalmát. Ezen kívül minden már
 változó jelentése már ismert. A form megjelenítése a html fájlban a következő módon néz ki:
+
+![1](images/1.png)
 
 A kapcsos zárójelek a Django Template Language sajátosságai. A dupla kapcsos zárójel
 változók megjelenítésére használatos, a százalék jellel kiegészített pedig különböző
