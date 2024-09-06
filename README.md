@@ -107,9 +107,9 @@ WhiteNoise lett felhasználva.
 
 ```
 Minden Django projekt egy vagy több appból áll. Jelen esetben 3 app működik:
- auth – Felhasználók kezelése, regisztráció, beléptetés
- processing – A „fő” app, amelyik a NOTAMok begyűjtését, feldolgozását végzi
- reporting – Az adatbázisba mentett adatokból készít jelentést
+• auth – Felhasználók kezelése, regisztráció, beléptetés
+• processing – A „fő” app, amelyik a NOTAMok begyűjtését, feldolgozását végzi
+• reporting – Az adatbázisba mentett adatokból készít jelentést
 ```
 #### MVT
 
@@ -153,11 +153,11 @@ Az urlpatterns változó egy listába foglalja az apphoz tartozó útvonalakat. 
 3 felhasznált argumentum a következő:
 
 ```
- route – a relatív URL, amelyen keresztül a View elérhető. A relációs jelek között
+• route – a relatív URL, amelyen keresztül a View elérhető. A relációs jelek között
 látható változókat a router kulcsszó argumentumként továbbítja a View felé
- view – funkcionális view esetén maga a függvény, osztályalapú view esetén pedig
+• view – funkcionális view esetén maga a függvény, osztályalapú view esetén pedig
 az as_view metódust kell definiálni
- name – az útvonal elnevezésére szolgál.
+• name – az útvonal elnevezésére szolgál.
 ```
 ### Adatbázis
 
@@ -178,9 +178,9 @@ category = models.CharField(max_length= 5 )
 Futópályák mezői:
 
 ```
- airport: Repülőtér 4 betűs ICAO kódja
- designator: Futópálya jele
- category: Műszeres megközelítés kategóriája
+• airport: Repülőtér 4 betűs ICAO kódja
+• designator: Futópálya jele
+• category: Műszeres megközelítés kategóriája
 ```
 #### Airport tábla
 
@@ -191,8 +191,8 @@ purpose = models.CharField(max_length= 4 )^
 Repülőterek mezői:
 
 ```
- icao: Repülőtér 4 betűs ICAO kódja
- purpose: Repülőtér besorolása (bázis, desztináció)
+• icao: Repülőtér 4 betűs ICAO kódja
+• purpose: Repülőtér besorolása (bázis, desztináció)
 ```
 #### Notam tábla
 
@@ -208,16 +208,16 @@ comment = models.CharField(max_length= 511 , default="")^
 NOTAMok mezői:
 
 ```
- notam_id: Egyedi azonosítószám
- airport: Repülőtér 4 betűs ICAO kódja
- qcode: NOTAM 4 betűs kategória kódja
+• notam_id: Egyedi azonosítószám
+• airport: Repülőtér 4 betűs ICAO kódja
+• qcode: NOTAM 4 betűs kategória kódja
 ```
 
 ```
- message: Teljes szabad szöveg
- startdate: Érvényesség kezdete
- enddate: Érvényesség vége
- comment: Teljes szövegből kiszűrt lényegi információ
+• message: Teljes szabad szöveg
+• startdate: Érvényesség kezdete
+• enddate: Érvényesség vége
+• comment: Teljes szövegből kiszűrt lényegi információ
 ```
 #### User tábla
 
@@ -226,22 +226,22 @@ keretrendszerrel.
 
 ```
 Mezők:
- username: A felhasználónév
- password: A felhasználó hashelt jelszava
- first_name: Keresztnév, opcionális
- last_name: Vezetéknév, opcionális
- email: Email cím, opcionális
- groups: Lehetőség van felhasználó csoportok létrehozására, ez a mező tárolja, mely
+• username: A felhasználónév
+• password: A felhasználó hashelt jelszava
+• first_name: Keresztnév, opcionális
+• last_name: Vezetéknév, opcionális
+• email: Email cím, opcionális
+• groups: Lehetőség van felhasználó csoportok létrehozására, ez a mező tárolja, mely
 csoportokhoz tartozik a felhasználó. Ebben a projektben nem használt
- user_permissions: Jellemzően az adatbázis bejegyzések módosításához szükséges
+• user_permissions: Jellemzően az adatbázis bejegyzések módosításához szükséges
 engedélyeket tárolja
- is_staff: Boolean, az admin oldal elérését teszi lehetővé
- is_active: Boolean, annyit takar, hogy aktívnak tekinthető-e a felhasználó. Ajánlott
+• is_staff: Boolean, az admin oldal elérését teszi lehetővé
+• is_active: Boolean, annyit takar, hogy aktívnak tekinthető-e a felhasználó. Ajánlott
 gyakorlat törlés helyett inaktívra állítani a felhasználót
- is_superuser: Boolean, igaz érték esetén automatikusan megkap minden engedélyt
+• is_superuser: Boolean, igaz érték esetén automatikusan megkap minden engedélyt
 a felhasználó
- last_login: Utolsó bejelentkezés ideje
- date_joined: Felhasználó létrehozásának ideje
+• last_login: Utolsó bejelentkezés ideje
+• date_joined: Felhasználó létrehozásának ideje
 ```
 
 ### Autentikáció
@@ -581,8 +581,8 @@ choices = enumerate(["BASE", "BASE+DEST", "SPECIFIC"])
 locations = forms.TypedChoiceField(choices=choices)
 remark = forms.CharField(required=False)^
 A NotamSelectForm 2 input mezőt hoz létre:
- locations: 3 választási lehetőség, bázisok, bázisok és desztinációk, vagy specifikus
- remark: szabad szöveges input mező, specifikus opció esetén az itt felsorolt
+• locations: 3 választási lehetőség, bázisok, bázisok és desztinációk, vagy specifikus
+• remark: szabad szöveges input mező, specifikus opció esetén az itt felsorolt
 repterekre fogja lekérni a NOTAMokat.
 ```
 @method_decorator(staff_member_required, name='dispatch')
@@ -598,9 +598,9 @@ requesttel kezdeményezzük az API hívást. Az API cím 3 kötelező paraméter
 
 
 ```
- api_key: érvényes kulcs nélkül nem kapunk adatokat
- format: CSV vagy JSON
- locations: egy, vagy több ICAO kód vesszővel elválasztva
+• api_key: érvényes kulcs nélkül nem kapunk adatokat
+• format: CSV vagy JSON
+• locations: egy, vagy több ICAO kód vesszővel elválasztva
 ```
 API_ADDRESS =
 f"https://applications.icao.int/dataservices/api/notams-
@@ -815,9 +815,9 @@ context=context)
 #### Kompatibilitás
 
 Tesztelt böngészők:
- Google Chrome
- Internet Explorer
- Microsoft Edge
+• Google Chrome
+• Internet Explorer
+• Microsoft Edge
 A honlap fejlesztése végig Chrome használata mellett történt. Az Explorer szemmel is
 láthatóan elmaradt teljesítményben a többi böngészőtől, főleg kulcsszavas kereséskor lehetett
 lassulásokat tapasztalni. Emellett kisebb-nagyobb különbségekkel találkoztam a stíluslap
@@ -882,14 +882,14 @@ ICAO kódja, jobb felső sarkában a qcode olvasható.
 
 ```
 A képre kattintva felugranak a NOTAM további részletei:
- comment: vastag betűkkel olvasható az ablak felső részén
- full message: a NOTAM teljes szövege
- valid from/till: érvényességi idő kezdete és vége
- update gomb: NOTAM módosítása, csak staff felhasználók számára elérhető
+• comment: vastag betűkkel olvasható az ablak felső részén
+• full message: a NOTAM teljes szövege
+• valid from/till: érvényességi idő kezdete és vége
+• update gomb: NOTAM módosítása, csak staff felhasználók számára elérhető
 ```
 
 ```
- delete gomb: NOTAM törlése, csak staff felhasználók számára elérhető
+• delete gomb: NOTAM törlése, csak staff felhasználók számára elérhető
 ```
 ```
 X-re kattintva eltűnik.
@@ -928,10 +928,10 @@ A főoldalról kiindulva, a „Process new notams” feliratú kártyára kattin
 repülőterek kiválasztását lehetővé tevő formhoz. A „locations” címke melletti lenyíló
 menüből 3 opció közül választhatunk:
 
- BASE – kizárólag a bázisokra kérjük le a legutóbbi frissítés óta kiadott
+• BASE – kizárólag a bázisokra kérjük le a legutóbbi frissítés óta kiadott
 NOTAMokat
- BASE+DEST – bázisokra és desztinációkra is
- SPECIFIC – egyedi reptereket szeretnénk megadni
+• BASE+DEST – bázisokra és desztinációkra is
+• SPECIFIC – egyedi reptereket szeretnénk megadni
 Utóbbi választásakor, a „remark” mezőben adhatjuk meg szóközzel elválasztva a kívánt
 repterek ICAO kódját. A „Process” gombra kattintva elküldjük a kérést az API szolgáltató
 felé, majd néhány másodperc után a szerver átirányít NOTAM lista oldalra. A lista oldal
@@ -981,14 +981,14 @@ további funkciókkal ellátni az oldalt a jövőben.
 ## Irodalomjegyzék
 
 ```
- https://docs.djangoproject.com/
- https://www.fullstackpython.com/
- https://simpleisbetterthancomplex.com/
- https://www.w3schools.com/
- https://stackoverflow.com/
- https://freefrontend.com/
- https://realpython.com/
- https://css-tricks.com/
+• https://docs.djangoproject.com/
+• https://www.fullstackpython.com/
+• https://simpleisbetterthancomplex.com/
+• https://www.w3schools.com/
+• https://stackoverflow.com/
+• https://freefrontend.com/
+• https://realpython.com/
+• https://css-tricks.com/
 ```
 ## Köszönetnyilvánítás
 
